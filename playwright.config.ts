@@ -35,18 +35,19 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'Chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: /.*backend\.spec\.ts/,
     },
-
     {
-      name: 'firefox',
+      name: 'Firefox',
       use: { ...devices['Desktop Firefox'] },
+      testIgnore: /.*backend\.spec\.ts/,
     },
-
     {
-      name: 'webkit',
+      name: 'WebKit',
       use: { ...devices['Desktop Safari'] },
+      testIgnore: /.*backend\.spec\.ts/,
     },
 
     /* Test against mobile viewports. */
@@ -68,6 +69,15 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
+    {
+      name: 'API',
+      use: {
+        // No browser needed for API tests
+        browserName: 'chromium', // or 'none' if using Playwright v1.39+
+        baseURL: 'https://reqres.in',
+      },
+      testMatch: /.*backend\.spec\.ts/,
+    },
   ],
 
   /* Run your local dev server before starting the tests */
