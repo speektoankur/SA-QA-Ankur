@@ -5,7 +5,8 @@ export class LoginScreen {
     readonly userName = '#user-name';
     readonly password = '#password';
     readonly loginButton = '#login-button';
-    readonly errorMessage = 'Epic sadface: Username and password do not match any user in this service';
+    readonly errorMessageNoCreds = 'Epic sadface: Username is required';
+    readonly errorMessageNoMatch = 'Epic sadface: Username and password do not match any user in this service';
 
     async login(username: string, password: string) {
         await this.page.fill(this.userName, username);
@@ -13,7 +14,4 @@ export class LoginScreen {
         await this.page.click(this.loginButton);
     }
 
-    async getErrorMessage() {
-        return await this.page.textContent(this.errorMessage);
-    }
 }

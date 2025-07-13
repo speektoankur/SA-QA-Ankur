@@ -5,11 +5,12 @@ import { LoginScreen } from '../src/pageObjects/loginScreen';
 import { InventoryScreen } from '../src/pageObjects/inventoryScreen';
 import { CheckoutScreen } from '../src/pageObjects/checkoutScreen';
 
-test('Test 1: Login and then Add to Cart', async ({ page, gotoUrl }) => {
+test('Verify User able to add product to Cart and complete checkout @login @checkout @regression', async ({ page, gotoUrl }) => {
   await gotoUrl('https://www.saucedemo.com/');
   const loginScreen = new LoginScreen(page);
   const inventoryScreen = new InventoryScreen(page);
-
+  
+  // Login and Add Costly Product in Cart
   await loginScreen.login('standard_user', 'secret_sauce');
   await inventoryScreen.selectProductSort('Price (high to low)');
   const firstProductName = await inventoryScreen.getFirstProductName();
@@ -34,6 +35,16 @@ test('Test 1: Login and then Add to Cart', async ({ page, gotoUrl }) => {
   expect(page.getByText('Thank you for your order!')).toBeVisible();
   
 });
+
+test('Verify User not able to navigate to Home Screen without providing Credentials @login @regression', async ({ page, gotoUrl }) => {
+      await gotoUrl('https://www.saucedemo.com/');
+      const loginScreen = new LoginScreen(page);
+      await page.locator(loginScreen.loginButton).click();
+      
+      // Verifying alert and Current URL 
+      expect(page.getByText(loginScreen.errorMessageNoCreds)).toBeVisible();
+      expect(page.url()).toEqual('https://www.saucedemo.com/');
+    });
 
 test.afterEach(async ({ page }, testInfo) => {
   if (page) {
