@@ -125,6 +125,19 @@ npx playwright show-report
 - Backend/API test examples are welcome.
 - `.gitignore` ensures node_modules, reports, and results are not committed.
 
+## Test Execution Artefacts 
+
+<img width="1046" height="796" alt="Screenshot 2025-07-13 at 9 10 50 PM" src="https://github.com/user-attachments/assets/e891e162-a770-4ff4-9003-22200580162f" />
+
+## Every Time Changes Pushed to Main GitHub Actions Trigger all Tests
+
+<img width="1906" height="887" alt="Screenshot 2025-07-13 at 9 12 29 PM" src="https://github.com/user-attachments/assets/555000fb-acf5-43cc-afed-10051963b485" />
+
+
+
+
+
+
 ---
 
 ## References
