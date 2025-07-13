@@ -5,7 +5,7 @@
 This repository demonstrates a **hybrid test automation approach** using [Playwright](https://playwright.dev/) for both **FrontEnd (UI)** and **BackEnd (API)** testing. The project is structured to allow easy extension for both types of tests, with a focus on modularity and maintainability.
 
 - **FrontEnd Tests:** Automated browser-based tests using Playwright, leveraging the Page Object Model (POM) for maintainability.
-- **BackEnd Tests:** (Planned) API-level tests using Playwright's API testing capabilities. The structure is ready for backend tests, but no backend tests are implemented yet.
+- **BackEnd Tests:** API-level tests using Playwright's API testing capabilities. Backend tests are now implemented in `tests/backend.spec.ts`.
 
 ---
 
@@ -45,16 +45,21 @@ npx playwright test tests/frontend.spec.ts
 
 ### BackEnd (API) Tests
 
-The structure for backend/API tests is present in `tests/backend.spec.ts`, but no backend tests are implemented yet. You can add your API tests in this file using Playwright's [APIRequestContext](https://playwright.dev/docs/api/class-apirequestcontext).
+Backend/API tests are implemented in `tests/backend.spec.ts` using Playwright's [APIRequestContext](https://playwright.dev/docs/api/class-apirequestcontext). Example:
 
-Example (to be added in `backend.spec.ts`):
 ```ts
 import { test, expect, request } from '@playwright/test';
+import { User } from '../src/dataModels/user';
 
-test('example API test', async () => {
-  const apiContext = await request.newContext();
-  const response = await apiContext.get('https://api.example.com/endpoint');
+test('Verify GET Request on /api/users Response @backend', async ({ request }) => {
+  const response = await request.get('https://reqres.in/api/users?page=2');
   expect(response.ok()).toBeTruthy();
+  const body = await response.json();
+  expect(Array.isArray(body.data)).toBe(true);
+  for (const user of body.data as User[]) {
+    expect(typeof user.id).toBe('number');
+    expect(typeof user.email).toBe('string');
+  }
 });
 ```
 
@@ -66,10 +71,11 @@ test('example API test', async () => {
 SA-QA-Ankur/
 ├── src/
 │   ├── fixtures/           # Custom Playwright fixtures (browser, page, helpers)
-│   └── pageObjects/        # Page Object Model classes for UI screens
+│   ├── pageObjects/        # Page Object Model classes for UI screens
+│   └── dataModels/         # TypeScript interfaces for API data models
 ├── tests/
 │   ├── frontend.spec.ts    # Frontend (UI) tests
-│   └── backend.spec.ts     # Backend (API) tests (scaffolded)
+│   └── backend.spec.ts     # Backend (API) tests
 ├── playwright.config.ts    # Playwright configuration
 ├── package.json            # Project metadata and dependencies
 ├── .gitignore
@@ -78,8 +84,9 @@ SA-QA-Ankur/
 ### Key Files
 - `src/fixtures/base.ts`: Custom Playwright fixtures (browser, page, navigation helper, screenshot on failure)
 - `src/pageObjects/`: Page Object Model classes for Login, Inventory, and Checkout screens
+- `src/dataModels/`: TypeScript interfaces for API data models (e.g., `user.ts` for user objects)
 - `tests/frontend.spec.ts`: Example UI tests (login, add to cart, checkout)
-- `tests/backend.spec.ts`: Placeholder for API/backend tests
+- `tests/backend.spec.ts`: Example API/backend tests (GET/POST, data validation)
 
 ---
 
@@ -90,8 +97,9 @@ SA-QA-Ankur/
   - Fixtures provide browser/page management and navigation helpers.
   - Screenshots are captured after each test for debugging.
 - **BackEnd:**
-  - (Planned) Will use Playwright's API testing features for direct HTTP requests and assertions.
-  - Extend `backend.spec.ts` with API tests as needed.
+  - Uses Playwright's API testing features for direct HTTP requests and assertions.
+  - Backend tests are implemented and validate API responses and data models.
+  - Extend `backend.spec.ts` with additional API tests as needed.
 
 This hybrid approach allows you to:
 - Validate end-to-end user flows (UI)
