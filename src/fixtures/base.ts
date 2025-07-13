@@ -26,3 +26,16 @@ export const test = base.extend<Fixtures>({
 });
 
 export { expect } from '@playwright/test';
+
+// Take screenshot after each test execution
+import path from 'path';
+
+test.afterEach(async ({ page }, testInfo) => {
+  if (page) {
+    const screenshotPath = path.join(
+      'test-results',
+      `${testInfo.title.replace(/[^a-zA-Z0-9-_]/g, '_')}.png`
+    );
+    await page.screenshot({ path: screenshotPath, fullPage: true });
+  }
+});

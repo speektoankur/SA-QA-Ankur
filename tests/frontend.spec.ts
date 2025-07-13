@@ -34,3 +34,13 @@ test('Test 1: Login and then Add to Cart', async ({ page, gotoUrl }) => {
   expect(page.getByText('Thank you for your order!')).toBeVisible();
   
 });
+
+test.afterEach(async ({ page }, testInfo) => {
+  if (page) {
+    const screenshot = await page.screenshot({ fullPage: true });
+    await testInfo.attach('screenshot', {
+      body: screenshot,
+      contentType: 'image/png',
+    });
+  }
+});
