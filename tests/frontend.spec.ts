@@ -1,5 +1,3 @@
-// Test 1: Login and then Add to Cart
-
 import { test, expect } from '../src/fixtures/base';
 import { LoginScreen } from '../src/pageObjects/loginScreen';
 import { InventoryScreen } from '../src/pageObjects/inventoryScreen';
